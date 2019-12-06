@@ -137,13 +137,119 @@ print(tinydict)          # 输出完整的字典
 print(tinydict.keys())   # 输出所有键
 print(tinydict.values())  # 输出所有值
 
+'''
+算术运算符
+Python支持 +，-，*，/（数学意义除，结果可以带小数），//（整除，结果为向下取整），%（取模），**（幂运算）
+'''
+a = 5; b = 2
+print("a/b=", a / b)
+print("a//b=", a // b)
+print("a%b=", a % b)
+print("a**b=", a ** b)
 
+'''
+比较运算符
+Python比较运算符与java相同，支持==，！=，>,<,>=,<=
+'''
+if (a == b):
+    print("a==b")
+elif(a != b):
+    print("a!=b")
+if(a > b):
+    print("a>b")
+elif(a < b):
+    print("a<b")
+if(a >= b):
+    print("a>=b")
+else:
+    print("a<=b")
 
+'''
+赋值运算符
+Python比较运算符与java相同，支持=，+=，-=，*=，**=，/=，//=，%=
+Python 3.8 新增海象运算符，可在表达式内部为变量赋值。
+'''
+c = "asdfgasdfgh"
+if (n := len(c)) > 10:
+    print(f"List is too long ({n} elements, expected <= 10)")
 
+'''
+Python位运算符
+Python比较运算符与java相同，支持&,|,^,~(按位取反)，<<,>>
+'''
+print(~a)  # ~对数据的每个二进制位取反,即把1变为0,把0变为1。~x 类似于 -x-1
 
+'''
+Python逻辑运算符
+Python 逻辑运算符包含 and，not ，or，与java的&&，||，！相同
+'''
+a = 10
+b = 20
+if (a and b):
+    print("1 - 变量 a 和 b 都为 true")
+else:
+    print("1 - 变量 a 和 b 有一个不为 true")
 
+if (a or b):
+    print("2 - 变量 a 和 b 都为 true，或其中一个变量为 true")
+else:
+    print("2 - 变量 a 和 b 都不为 true")
+# 修改变量 a 的值
+a = 0
+if (a and b):
+    print("3 - 变量 a 和 b 都为 true")
+else:
+    print("3 - 变量 a 和 b 有一个不为 true")
+if (a or b):
+    print("4 - 变量 a 和 b 都为 true，或其中一个变量为 true")
+else:
+    print("4 - 变量 a 和 b 都不为 true")
+if not (a and b):
+    print("5 - 变量 a 和 b 都为 false，或其中一个变量为 false")
+else:
+    print("5 - 变量 a 和 b 都为 true")
 
+'''
+Python成员运算符
+Python支持成员运算符，返回成员是否属于指定的序列，包括字符串，列表或元组。
+'''
+a = 10
+b = 20
+list = [1, 2, 3, 4, 5]
+if (a in list):
+    print("1 - 变量 a 在给定的列表中 list 中")
+else:
+    print("1 - 变量 a 不在给定的列表中 list 中")
+if (b not in list):
+    print("2 - 变量 b 不在给定的列表中 list 中")
+else:
+    print("2 - 变量 b 在给定的列表中 list 中")
+# 修改变量 a 的值
+a = 2
+if (a in list):
+    print("3 - 变量 a 在给定的列表中 list 中")
+else:
+    print("3 - 变量 a 不在给定的列表中 list 中")
 
+'''
+Python身份运算符
+身份运算符用于比较两个对象的存储单元
+x is y, 类似 id(x) == id(y) , 如果引用的是同一个对象则返回 True，否则返回 False
+x is not y ， 类似 id(a) != id(b)。如果引用的不是同一个对象则返回结果 True，否则返回 False。
+注： id() 函数用于获取对象内存地址。
+is 与 == 区别：
+is 用于判断两个变量引用对象是否为同一个， == 用于判断引用变量的值是否相等。
+'''
+if ( a is b ):
+   print ("1 - a 和 b 有相同的标识")
+else:
+   print ("1 - a 和 b 没有相同的标识")
+# 修改b的值
+b = 2
+if ( a is b ):
+   print ("2 - a 和 b 有相同的标识")
+else:
+   print ("2 - a 和 b 没有相同的标识")
 
 
 

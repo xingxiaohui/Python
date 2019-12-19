@@ -69,11 +69,17 @@ def student_num():
     get_url(download_page(target_url))
     for url in url_list:
         parse_number(download_page(base_url+url))
+    page = []
+    i = 0
+    for j in list(numbers):
+        page.append(i)
+        i += 1
     print(list(numbers))
+    print(list(page))
 
 
 if __name__ == '__main__':
     # 爬取豆瓣电影TOP250标题
-    douban_movie()
+    # douban_movie()
     # 爬取python教程每页的阅读量
-    # student_num()
+    student_num()

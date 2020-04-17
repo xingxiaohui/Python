@@ -1,6 +1,7 @@
 """
 python 学习第八天 GUI 与网络编程
 """
+import datetime
 import threading
 import tkinter as tk
 import socket
@@ -89,8 +90,14 @@ def client_demo():
     s.send(b'exit')
     s.close()
 
+def task():
+    # 获取工作日
+    dt = datetime.datetime(2020, 4, 4, 9, 46)
+    daya = dt.strftime('%w')
+    print(daya)
 
 if __name__ == '__main__':
+    task()
     #gui_demo()
-    server_demo()
+    #server_demo()
     #client_demo()

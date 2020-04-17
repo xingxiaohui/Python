@@ -42,24 +42,22 @@ def send_email(shangzheng, shencheng):
     msg['To'] = _format_addr('投资者 <%s>' % to_addr)
     msg['Subject'] = Header('今日指数数据简报', 'utf-8').encode()
 
-    server = smtplib.SMTP(smtp_server, 25)
+    server = smtplib.SMTP_SSL(smtp_server, 465)
     server.set_debuglevel(1)
     server.login(from_addr, password)
     server.sendmail(from_addr, [to_addr], msg.as_string())
     server.quit()
 
 
-# 能够根据今天的日期生成对应问候语
 def task():
     # 获取工作日
     daya = datetime.datetime.now().strftime('%w')
-    if daya != 0 or daya != 6:
+    if daya != 0 and daya != 6:
         shangzheng = download_page(shangzheng_url).split(",")
         shencheng = download_page(shencheng_url).split(",")
         send_email(shangzheng, shencheng)
 
-
-schedule.every().day.at("14:40").do(task)
+schedule.every().day.at("14:29").do(task)
 
 if __name__ == '__main__':
     # greetings()

@@ -3,8 +3,8 @@
 """
 import schedule
 import time
-import datetime
 import requests
+from datetime import datetime
 from email.header import Header
 from email.mime.text import MIMEText
 from email.utils import parseaddr, formataddr
@@ -51,13 +51,14 @@ def send_email(shangzheng, shencheng):
 
 def task():
     # 获取工作日
-    daya = datetime.datetime.now().strftime('%w')
-    if daya != 0 and daya != 6:
+    daya = datetime.now().isoweekday()
+    if daya != 6 and daya != 7:
         shangzheng = download_page(shangzheng_url).split(",")
         shencheng = download_page(shencheng_url).split(",")
         send_email(shangzheng, shencheng)
 
-schedule.every().day.at("14:29").do(task)
+
+schedule.every().day.at("14:45").do(task)
 
 if __name__ == '__main__':
     # greetings()

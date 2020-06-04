@@ -52,7 +52,8 @@ def send_email(shangzheng, shencheng):
 def task():
     # 获取工作日
     daya = datetime.now().isoweekday()
-    if daya != 6 and daya != 7:
+    # 判断是否是交易日执行
+    if daya <= 5:
         shangzheng = download_page(shangzheng_url).split(",")
         shencheng = download_page(shencheng_url).split(",")
         send_email(shangzheng, shencheng)

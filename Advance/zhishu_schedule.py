@@ -4,7 +4,7 @@
 import schedule
 import time
 import requests
-from datetime import datetime
+import datetime
 from email.header import Header
 from email.mime.text import MIMEText
 from email.utils import parseaddr, formataddr
@@ -12,6 +12,7 @@ import smtplib
 
 shangzheng_url = 'http://hq.sinajs.cn/list=s_sh000001'
 shencheng_url = 'http://hq.sinajs.cn/list=s_sz399001'
+xinzhai_url = 'http://data.eastmoney.com/xg/kzz/default.html/em_mutisvcexpandinterface/api/js/get?type=KZZ_LB2.0&token=70f12f2f4f091e459a279469fe49eca5'
 shangzheng = []
 shencheng = []
 
@@ -30,17 +31,23 @@ def _format_addr(s):
     return formataddr((Header(name, 'utf-8').encode(), addr))
 
 
-def send_email(shangzheng, shencheng):
+def send_email(shangzheng, shencheng, flag):
     from_addr = 'moe_noreply@163.com'
     password = 'moemoe961753'
     to_addr = '1559237979@qq.com'
     smtp_server = 'smtp.163.com'
-    text = '今日上证指数：' + shangzheng[1] + '，涨跌值：' + shangzheng[2] + '，涨跌幅：' + shangzheng[3]+'<br/>'
-    text += '今日深成指数：' + shencheng[1] + '，涨跌值：' + shencheng[2] + '，涨跌幅：' + shencheng[3]
+    text = '投资邮件提醒：<br/>'
+    if flag == 'zhishu':
+        text += '<br/>&nbsp;&nbsp;&nbsp;&nbsp;今日上证指数：' + shangzheng[1] + '，涨跌值：' + shangzheng[2] + '，涨跌幅：' + shangzheng[3]+'<br/><br/>'
+        text += '&nbsp;&nbsp;&nbsp;&nbsp;今日深成指数：' + shencheng[1] + '，涨跌值：' + shencheng[2] + '，涨跌幅：' + shencheng[3]
+    if flag == 'xinzhai':
+        text += '<br/>&nbsp;&nbsp;&nbsp;&nbsp;系统提醒您，今日有新的可转债申购，请您及时前往投资页面进行申购。<br/><br/>'
+        text += '&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://data.eastmoney.com/xg/kzz/default.html">点此查看</a><br/><br/>'
+        text += '&nbsp;&nbsp;&nbsp;&nbsp;或复制链接打开： http://data.eastmoney.com/xg/kzz/default.html'
     msg = MIMEText(text, 'HTML', 'utf-8')
-    msg['From'] = _format_addr('指数自动提醒 <%s>' % from_addr)
+    msg['From'] = _format_addr('投资提醒 <%s>' % from_addr)
     msg['To'] = _format_addr('投资者 <%s>' % to_addr)
-    msg['Subject'] = Header('今日指数数据简报', 'utf-8').encode()
+    msg['Subject'] = Header('今日投资数据提醒', 'utf-8').encode()
 
     server = smtplib.SMTP_SSL(smtp_server, 465)
     server.set_debuglevel(1)
@@ -51,15 +58,29 @@ def send_email(shangzheng, shencheng):
 
 def task():
     # 获取工作日
-    daya = datetime.now().isoweekday()
+    daya = datetime.datetime.now().isoweekday()
     # 判断是否是交易日执行
     if daya <= 5:
         shangzheng = download_page(shangzheng_url).split(",")
         shencheng = download_page(shencheng_url).split(",")
-        send_email(shangzheng, shencheng)
+        send_email(shangzheng, shencheng, 'zhishu')
 
 
+def xinzhai_task():
+    # 获取工作日
+    daya = datetime.datetime.now().isoweekday()
+    res = download_page(xinzhai_url)
+    today = datetime.date.today()
+    tag = '"STARTDATE":"'+today.strftime('%Y-%m-%d')
+    # 判断是否是交易日执行
+    if daya <= 5:
+        if tag in res:
+            send_email(shangzheng, shencheng, 'xinzhai')
+
+
+schedule.every().day.at("09:36").do(xinzhai_task)
 schedule.every().day.at("14:45").do(task)
+
 
 if __name__ == '__main__':
     # greetings()

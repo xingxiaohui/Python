@@ -49,11 +49,12 @@ def send_email(shangzheng, shencheng, flag):
     msg['To'] = _format_addr('投资者 <%s>' % to_addr)
     msg['Subject'] = Header('今日投资数据提醒', 'utf-8').encode()
 
-    server = smtplib.SMTP_SSL(smtp_server, 465)
-    server.set_debuglevel(1)
-    server.login(from_addr, password)
-    server.sendmail(from_addr, [to_addr], msg.as_string())
-    server.quit()
+    if float(shangzheng[3]) <= -0.8 or float(shencheng[3]) <= -0.8:
+        server = smtplib.SMTP_SSL(smtp_server, 465)
+        server.set_debuglevel(1)
+        server.login(from_addr, password)
+        server.sendmail(from_addr, [to_addr], msg.as_string())
+        server.quit()
 
 
 def task():
@@ -78,8 +79,8 @@ def xinzhai_task():
             send_email(shangzheng, shencheng, 'xinzhai')
 
 
-schedule.every().day.at("09:36").do(xinzhai_task)
-schedule.every().day.at("14:45").do(task)
+# schedule.every().day.at("09:36").do(xinzhai_task)
+schedule.every().day.at("14:50").do(task)
 
 
 if __name__ == '__main__':
